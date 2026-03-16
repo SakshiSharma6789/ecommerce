@@ -31,3 +31,17 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Spring Boot
+target/
+*.log
+
+# application properties
+src/main/resources/application.properties
+
+# IDE
+.idea/
+*.iml
+
+# OS files
+.DS_Store

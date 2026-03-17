@@ -35,9 +35,11 @@ public class CustomerAuthService {
     private final AddressRepo addressRepo;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private  final VerificationTokenService verificationTokenService;
 
     @Transactional
     public String registerCustomer(CustomerRegisterRequest rqst) {
+
 
         Role customerRole = roleRepository.findByAuthority(Roles.ROLE_CUSTOMER)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer role not found"));
@@ -55,7 +57,8 @@ public class CustomerAuthService {
                 throw new ResourceAlreadyExistsException("customer account is already exist");
             }
             user.getRoles().add(customerRole);
-            userRepository.save(user);
+           User savedUser= userRepository.save(user);
+            verificationTokenService.createAndSendToken(savedUser);
         }
         else{
             if(!rqst.getPassword().equals(rqst.getConfirmPassword())){
@@ -72,7 +75,8 @@ public class CustomerAuthService {
                     .build();
 
             user.getRoles().add(customerRole);
-            user=userRepository.save(user);
+            User savedUser=userRepository.save(user);
+            verificationTokenService.createAndSendToken(savedUser);
 
         }
 

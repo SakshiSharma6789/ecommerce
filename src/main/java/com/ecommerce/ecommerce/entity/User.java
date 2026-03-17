@@ -47,5 +47,7 @@ public class User extends Auditable{
     )
     @Builder.Default
     private Set<Role> roles = new HashSet<>();
+
+
 }
 
